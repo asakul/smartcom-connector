@@ -17,7 +17,7 @@ namespace SmartcomConnector.ATrade
         public HistoryProviderServer(StServer smartCom, string endpoint)
         {
             data = new List<Bar>();
-            dataSemaphore = new SemaphoreSlim(1, 1);
+            dataSemaphore = new SemaphoreSlim(0, 1);
             server = smartCom;
             hpEndpoint = endpoint;
             poller = new NetMQPoller();
@@ -30,6 +30,7 @@ namespace SmartcomConnector.ATrade
                 string msg = parts[0];
                 handleMessage(msg, a.Socket);
             };
+            poller.Add(socket);
 
             server.AddBar += Server_AddBar;
         }
